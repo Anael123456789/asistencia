@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Asistentes Registrados</title>
+  <script type="module">
+    // Importar SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+    // Configuración Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDQC4Orf4OWr8JuDGrmYvSDRSn6FCT6KoU",
+      authDomain: "asistenciaqr-10cae.firebaseapp.com",
+      projectId: "asistenciaqr-10cae",
+      databaseURL: "https://asistenciast-e9ff6-default-rtdb.firebaseio.com/",
+      storageBucket: "asistenciaqr-10cae.appspot.com",
+      messagingSenderId: "1023385957521",
+      appId: "1:1023385957521:web:00f39c30ee2aca76503b30",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Leer desde la tabla 'asistentesweb'
+    const tabla = document.getElementById("tabla");
+
+    onValue(ref(db, "asistentesweb"), (snapshot) => {
+      tabla.innerHTML = `
+        <tr>
+          <th>RUT</th><th>Nombre</th><th>Celular</th><th>Correo</th><th>Carrera</th><th>Institución</th><th>Fecha</th>
+        </tr>`;
+      snapshot.forEach(child => {
+        const data = child.val();
+        tabla.innerHTML += `
+          <tr>
+            <td>${data.rut}</td>
+            <td>${data.nombre}</td>
+            <td>${data.celular}</td>
+            <td>${data.correo}</td>
+            <td>${data.carrera}</td>
+            <td>${data.institucion}</td>
+            <td>${data.fecha}</td>
+          </tr>`;
+      });
+    });
+  </script>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+  <h1>Asistentes registrados</h1>
+  <table id="tabla"></table>
+</body>
+</html>
